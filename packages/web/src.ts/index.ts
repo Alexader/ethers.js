@@ -10,6 +10,7 @@ import { version } from "./_version";
 const logger = new Logger(version);
 
 import { getUrl, GetUrlResponse, Options } from "./geturl";
+import { HttpProviderAgent } from "./types";
 
 function staller(duration: number): Promise<void> {
     return new Promise((resolve) => {
@@ -54,6 +55,7 @@ export type ConnectionInfo = {
     errorPassThrough?: boolean;
 
     timeout?: number,
+    agent?: HttpProviderAgent,
 };
 
 export interface OnceBlockable {
@@ -168,6 +170,9 @@ export function _fetchData<T = Uint8Array>(connection: string | ConnectionInfo, 
 
         if (connection.fetchOptions != null) {
             options.fetchOptions = shallowCopy(connection.fetchOptions);
+        }
+        if (connection.agent != null) {
+            options.agent = connection.agent;
         }
     }
 
